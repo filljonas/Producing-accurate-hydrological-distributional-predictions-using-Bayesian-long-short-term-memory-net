@@ -71,7 +71,7 @@ class CamelsTXT(Dataset):
         if self.dates is not None:
             # If meteorological observations exist before start date use these as well. Similar to hydrological warmup period.
             if self.dates[0] - pd.DateOffset(days=self.seq_length) > df.index[0]:
-                start_date = self.dates[0] - pd.DateOffset(days=self.seq_length)
+                start_date = self.dates[0] - pd.DateOffset(days=self.seq_length - 1)
             else:
                 start_date = self.dates[0]
             df = df[start_date:self.dates[1]]

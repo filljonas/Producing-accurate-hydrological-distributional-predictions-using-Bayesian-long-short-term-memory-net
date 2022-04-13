@@ -164,26 +164,19 @@ def get_relevant_catchments():
     return files
 
 
-def plot_bayesian_graph_show_ploty(preds_means, upper_bound, lower_bound, obs, ds_test, resolution=None):
+def plot_bayesian(preds_means, upper_bound, lower_bound, obs, date_range):
     """
     Plots hydrograph with predictions, prediction inverval and observations
     """
-    if resolution == 'daily' or resolution is None:
-        start_date = ds_test.dates[0] + pd.DateOffset(days=121)
-        end_date = ds_test.dates[1] + pd.DateOffset(days=1)
-        date_range = pd.date_range(start_date, end_date)
-    elif resolution == 'hourly':
-        start_date = ds_test.dates[0] + pd.DateOffset(hours=121)
-        end_date = ds_test.dates[1] + pd.DateOffset(hours=1)
-        date_range = pd.date_range(start_date, end_date, freq='1H')
-
     fig = go.Figure([
         go.Scatter(
-            name='Observation',
+            name='Prediction interval',
             x=date_range,
-            y=obs.flatten(),
+            y=(upper_bound.flatten() + lower_bound.flatten()) / 2,
             mode='lines',
-            line=dict(color='blue'),
+            marker=dict(color='rgba(68, 68, 68, 0.3)'),
+            line=dict(width=1),
+            showlegend=True
         ),
         go.Scatter(
             name='Prediction',
@@ -211,12 +204,21 @@ def plot_bayesian_graph_show_ploty(preds_means, upper_bound, lower_bound, obs, d
             fillcolor='rgba(68, 68, 68, 0.3)',
             fill='tonexty',
             showlegend=False
-        )
+        ),
+        go.Scatter(
+            name='Observation',
+            x=date_range,
+            y=obs.flatten(),
+            mode='lines',
+            line=dict(color='blue'),
+        ),
     ])
     fig.update_layout(
-        yaxis_title='Discharge measures',
-        title='Hydrograph for the testing period',
+        yaxis_title='Discharge measure (mm/d)',
+        xaxis_title='Date',
         hovermode='x',
+        font_family='Arial',
+        font_size=25
     )
     fig.show()
 
@@ -242,3 +244,13 @@ def get_discharge_series(x, y, discharge_index):
         for j in range(len(x[i])):
             sys.stdout.write(f'{x[i][j][discharge_index]}   ')
         sys.stdout.write(f'Label: {y[i][0]}\n')
+
+
+def create_date_range(ds_test):
+    """
+    Create date ranges for plots
+    """
+    start_date = ds_test.dates[0]
+    end_date = ds_test.dates[1]
+    date_range = pd.date_range(start_date, end_date)
+    return date_range, start_date, end_date

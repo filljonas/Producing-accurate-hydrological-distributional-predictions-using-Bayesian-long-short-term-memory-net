@@ -23,7 +23,7 @@ from torch.utils.data import DataLoader
 CAMELS_ROOT = Path('../CAMELS/basin_timeseries_v1p2_metForcing_obsFlow/basin_dataset_public_v1p2')
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')  # This line checks if GPU is available
 # Other model-independent parameters for the run
-PLOT_FREQUENCY = 10  # How often should we plot? (20 for instance means every 20 epochs)
+PLOT_FREQUENCY = 1  # How often should we plot? (20 for instance means every 20 epochs)
 SAVE_MODEL = False  # Should we save the model?
 ONLY_EVAL = False  # Only evaluate the model, training was already done
 # The root for these paths is the main subdirectory of this project
@@ -248,8 +248,10 @@ def eval(config, model, test_loader, loss_func, ds_train, ds_test, days_future, 
     """
     Create plot and save model
     """
+    # Create data range
+    date_range, _, _ = create_date_range(ds_test)
     # Show plot
-    plot_bayesian_graph_show_ploty(preds_means, upper_bound, lower_bound, obs, ds_test)
+    plot_bayesian(preds_means, upper_bound, lower_bound, obs, date_range)
     # Save model if desired
     if SAVE_MODEL:
         torch.save(model.state_dict(), f'../{SAVE_PATH}/{i + 1}.pt')
