@@ -1,8 +1,7 @@
-# Bayes by Backprop for Hydrologic Discharge Prediction
+# Producing accurate hydrological distributional predictions using Bayesian long-short term memory networks
 
 ## What is this?
-The repository contains the software and model code for *Bayes by Backprop for Hydrologic Discharge Prediction*. It
-features all relevant source code for running the *Bayes-by-Backprop*-algorithm with the CAMELS-US-dataset as an
+The repository contains the software and model code for *Producing accurate hydrological distributional predictions using Bayesian long-short term memory networks*. It features all relevant source code for running the *Bayes-by-Backprop*-algorithm with the CAMELS-US-dataset as an
 application. It is possible to train and evaluate models following all three architecture presented in the paper
 (many-to-one, many-to-one with discharge and many-to-many). Moreover, it is possible to tweak the proposed
 hyperparameters in order to experiment with different architectures.
